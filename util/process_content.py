@@ -39,14 +39,8 @@ def process_feature_data(feature_data):
     token = choose_newlines(feature_data)
     feature_data = feature_data.split(token)
 
-    # 特征矩阵若行向量，需单独处理
-    if len(feature_data) > 1:
-        # 特征矩阵
-        feature_data = [feature_str.strip().split() for feature_str in feature_data]
-        feature_data = [list(map(int, arr)) for arr in feature_data]
-    elif len(feature_data) == 1:
-        # 行向量
-        feature_data = [[int(x) for x in feature_data.strip().split()]]
+    feature_data = [feature_str.strip().split() for feature_str in feature_data]
+    feature_data = [list(map(int, arr)) for arr in feature_data]
 
     return feature_data
 
