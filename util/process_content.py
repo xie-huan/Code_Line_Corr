@@ -40,11 +40,11 @@ def process_feature_data(feature_data):
     feature_data = feature_data.split(token)
 
     # 特征矩阵若行向量，需单独处理
-    if isinstance(feature_data, list):
+    if len(feature_data) > 1:
         # 特征矩阵
         feature_data = [feature_str.strip().split() for feature_str in feature_data]
         feature_data = [list(map(int, arr)) for arr in feature_data]
-    elif isinstance(feature_data,str):
+    elif len(feature_data) == 1:
         # 行向量
         feature_data = [[int(x) for x in feature_data.strip().split()]]
 
