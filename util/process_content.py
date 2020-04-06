@@ -23,12 +23,12 @@ def process_content(columns_path):
     token = choose_newlines(columns)
     if token in columns:
         temp_content = columns.split(token)
-        totol_line = int(temp_content[0])
-        concrete_columns = temp_content[1].split()[:totol_line]
+        total_line = int(temp_content[0])
+        concrete_columns = temp_content[1].split()[:total_line]
     else:
         temp_content = columns.split()
-        totol_line = int(temp_content[0])
-        concrete_columns = columns.split()[1:totol_line+1]
+        total_line = int(temp_content[0])
+        concrete_columns = columns.split()[1:total_line+1]
     return concrete_columns
 
 
