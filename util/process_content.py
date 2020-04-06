@@ -24,7 +24,7 @@ def process_content(columns_path):
     if token in columns:
         temp_content = columns.split(token)
         totol_line = int(temp_content[0])
-        concrete_columns = temp_content[1].split()[:totol_line+1]
+        concrete_columns = temp_content[1].split()[:totol_line]
     else:
         temp_content = columns.split()
         totol_line = int(temp_content[0])
