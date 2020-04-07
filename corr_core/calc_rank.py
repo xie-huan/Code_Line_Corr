@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def calc_rank(pearson_corr, spearman_corr, kendall_corr, fault_line_data):
     # rank_list_pearson = list()
     # rank_list_spearman = list()
@@ -15,7 +16,10 @@ def calc_rank(pearson_corr, spearman_corr, kendall_corr, fault_line_data):
         if line in real_line_data:
             real_fault_line_data.append(line)
         else:
-            real_fault_line_data.append(find_closest_num(real_line_data, line))
+            prob_val = find_closest_num(real_line_data, line)
+            for val in prob_val:
+                real_fault_line_data.append(val)
+    real_fault_line_data = list(set(real_fault_line_data))
 
     rank_list_pearson = [pearson_corr[pearson_corr['line_num'] == line_num].index.values[0] + 1
                          for line_num in real_fault_line_data]
@@ -34,9 +38,12 @@ def calc_rank(pearson_corr, spearman_corr, kendall_corr, fault_line_data):
 # faultLine中的行可能对应不了具体的行数，则选择最近的代码行
 def find_closest_num(real_line_data,target):
     target = int(target)
-    line_data_np = np.array(real_line_data,dtype=int)
+    line_data_np = np.array(real_line_data, dtype=int)
     min_diff_val = min(abs(line_data_np-target))
+
+    if str(target + min_diff_val) in real_line_data and str(target - min_diff_val) in real_line_data:
+        return list([str(target + min_diff_val), str(target - min_diff_val)])
     if str(target + min_diff_val) in real_line_data:
-        return str(target + min_diff_val)
+        return list(str(target + min_diff_val))
     if str(target - min_diff_val) in real_line_data:
-        return str(target - min_diff_val)
+        return list(str(target - min_diff_val))
