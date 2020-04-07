@@ -16,9 +16,7 @@ def calc_rank(pearson_corr, spearman_corr, kendall_corr, fault_line_data):
         if line in real_line_data:
             real_fault_line_data.append(line)
         else:
-            prob_val = find_closest_num(real_line_data, line)
-            for val in prob_val:
-                real_fault_line_data.append(val)
+            real_fault_line_data.extend(find_closest_num(real_line_data, line))
     real_fault_line_data = list(set(real_fault_line_data))
 
     rank_list_pearson = [pearson_corr[pearson_corr['line_num'] == line_num].index.values[0] + 1
