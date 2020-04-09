@@ -29,9 +29,9 @@ def calc_rank(pearson_corr, spearman_corr, kendall_corr, fault_line_data):
     top_rank_pearson = min(rank_list_pearson)
     top_rank_spearman = min(rank_list_spearman)
     top_rank_kendall = min(rank_list_kendall)
-    return dict({"pearson rank":top_rank_pearson,
-                 "spearman rank":top_rank_spearman,
-                 "kendall rank":top_rank_kendall})
+    return dict({"pearson":top_rank_pearson,
+                 "spearman":top_rank_spearman,
+                 "kendall":top_rank_kendall})
 
 # faultLine中的行可能对应不了具体的行数，则选择最近的代码行
 def find_closest_num(real_line_data,target):
@@ -42,6 +42,6 @@ def find_closest_num(real_line_data,target):
     if str(target + min_diff_val) in real_line_data and str(target - min_diff_val) in real_line_data:
         return list([str(target + min_diff_val), str(target - min_diff_val)])
     if str(target + min_diff_val) in real_line_data:
-        return list(str(target + min_diff_val))
+        return list([str(target + min_diff_val)])
     if str(target - min_diff_val) in real_line_data:
-        return list(str(target - min_diff_val))
+        return list([str(target - min_diff_val)])
