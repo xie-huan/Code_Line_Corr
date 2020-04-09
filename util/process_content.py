@@ -41,6 +41,7 @@ def process_feature_data(feature_data):
 
     feature_data = [feature_str.strip().split() for feature_str in feature_data]
     feature_data = [list(map(int, arr)) for arr in feature_data]
+    feature_data = [[0 if a == 0 else 1 for a in elem] for elem in feature_data]
 
     return feature_data
 
