@@ -59,7 +59,8 @@ def process_label_data(label_data):
 # 提取出其中的数字，并以list形式返回
 def process_fault_line_data(fault_line_data):
     temp_data = re.findall("\"(.*?)\"", fault_line_data)[0]  # type:str
-    return temp_data.strip().split()
+    temp_data = temp_data.strip().split()
+    return list(map(int,temp_data))
 
 
 # 针对pearson.txt、spearman.txt、kendall.txt
@@ -67,6 +68,7 @@ def process_corr_data(corr_data):
     token = choose_newlines(corr_data)
     corr_data = [x.strip().split() for x in corr_data.strip().split(token)]
     for elem in corr_data:
+        elem[0] = int(elem[0])
         elem[1] = float(elem[1])
     return corr_data
 
