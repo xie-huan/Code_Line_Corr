@@ -1,7 +1,5 @@
 import numpy as np
 import pandas as pd
-from scipy.stats._stats import _kendall_dis
-from sklearn import metrics
 from scipy import stats
 
 # 计算kendall相关系数中的xtie，ytie
@@ -46,10 +44,11 @@ def mergeSortInversion(data, aux, low, high):
 
     return leftCount + rightCount + count
 
+
 # 计算kendall秩相关系数
 def calc_dis(y):
     aux = [y[i] for i in range(len(y))]
-    nSwap = mergeSortInversion(y,aux,0,len(y)-1)
+    nSwap = mergeSortInversion(y, aux, 0, len(y)-1)
     return nSwap
 
 
@@ -83,7 +82,7 @@ def tau_b(feature_series, label_series):
     con_minus_dis = tot - xtie - ytie + ntie - 2 * dis
     tau = con_minus_dis / np.sqrt(tot - xtie) / np.sqrt(tot - ytie)
 
-    tau = min(1., max(-1., tau))
+    # tau = min(1., max(-1., tau))
     return tau
 
 
@@ -109,7 +108,7 @@ def calc_corr_bymyself(data, method):
             else:
                 pearson_corr = cov / (std_x * std_y)  # 特征与标签的相关系数
                 pearson_corr = min(1., max(-1., pearson_corr))  # 限制结果范围区间为[-1, 1]
-                corr_dict[feature] = pearson_corr
+                corr_dict[feature] = round(pearson_corr, 6)     # 浮点数精度不准
 
     if method == "spearman":
         for feature in features_list:
@@ -126,19 +125,17 @@ def calc_corr_bymyself(data, method):
             # 排名有并列的情况
             feature_rank = data[feature].rank()
             label_rank = data[label].rank()
-            data[feature] = feature_rank
-            data[label] = label_rank
 
-            cov = data[feature].cov(data[label])  # 协方差
-            std_x = data[feature].std()  # 标准差
-            std_y = data[label].std()  # 标准差
+            cov = feature_rank.cov(label_rank)  # 协方差
+            std_x = feature_rank.std()  # 标准差
+            std_y = label_rank.std()  # 标准差
             # 分母为0，相关系数则为nan
             if abs(std_x * std_y) < 1e-5:
                 corr_dict[feature] = np.nan
             else:
                 spearman_corr = cov / (std_x * std_y)  # 特征与标签的相关系数
                 spearman_corr = min(1., max(-1., spearman_corr))  # 限制结果范围区间为[-1, 1]
-                corr_dict[feature] = spearman_corr
+                corr_dict[feature] = round(spearman_corr, 6)
 
     # 以下实现的是tau-b
     # tau = (c - d) / sqrt((n0 - n1) * (n0 - n2))
@@ -147,8 +144,13 @@ def calc_corr_bymyself(data, method):
     if method == "kendall":
         for feature in features_list:
             # 调用自己实现的tau_b计算kendall等级相关系数
-            kendall_corr = tau_b(data[feature], data[label])
-            corr_dict[feature] = kendall_corr
+            # 调包stats.kendalltau()，调自己写的函数tau_b()
+            kendall_corr = stats.kendalltau(data[feature].tolist(), data[label].tolist())
+            corr_dict[feature] = round(kendall_corr[0], 6)
+
+            # kendall_corr = tau_b(data[feature],data[label])
+            # corr_dict[feature] = kendall_corr
+
             # # 计算分母所需参数
             # xtie = count_tie(list(data[feature]))  # n1
             # ytie = count_tie(list(data[label]))  # n2
@@ -176,23 +178,6 @@ def calc_corr_bymyself(data, method):
             #     kendall_corr = min(1., max(-1., kendall_corr))  # 限制结果范围区间为[-1, 1]
             #     corr_dict[feature] = kendall_corr
 
-    if method == 'mutual information':
-        for feature in features_list:
-            labels_true = data[label]  # 标签@wzy
-            labels_pred = data[feature]  # 样本@wzy
-            # 调用metrics.mutual_info_score()计算互信息@wzy
-            mutual_information_coe = metrics.mutual_info_score(labels_pred,
-                                                               labels_true)
-            corr_dict[feature] = mutual_information_coe
-
-    if method == 'chisquare':
-        for feature in features_list:
-            exp = data[label]  # 标签@wzy
-            obs = data[feature]  # 样本@wzy
-            # 调用stats.chisquare，返回是一个列表，第二个值是所需值@wzy
-            p = stats.chisquare(obs, exp)
-            chisquare_coe = p[1]
-            corr_dict[feature] = chisquare_coe
     corr = pd.Series(corr_dict, dtype=float)
     return corr
 
