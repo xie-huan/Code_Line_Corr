@@ -16,7 +16,7 @@ def get_curr_data(curr_path):
     # print(len(feature_data[0]))
     # TODO: 需要判断columns的长度是否和特征矩阵匹配
     try:
-        feature_df = pd.DataFrame(feature_data,columns=concrete_columns)    # DataFrame
+        feature_df = pd.DataFrame(feature_data, columns=concrete_columns)    # DataFrame
     except:
         print("创建特征矩阵失败，请检查columns和data的匹配")
         exit()
@@ -26,7 +26,7 @@ def get_curr_data(curr_path):
     label_data = process_coding(label_path)
 
     label_data = process_label_data(label_data)
-    label_df = pd.DataFrame(label_data,columns=['error'])   # DataFrame
+    label_df = pd.DataFrame(label_data, columns=['error'])   # DataFrame
 
     # 合并数据
     data = pd.concat([feature_df, label_df], axis=1)
@@ -35,22 +35,18 @@ def get_curr_data(curr_path):
 
 
 def get_corr(path):
-    pearson_corr = process_coding(os.path.join(path, "pearson.txt"))
-    pearson_corr = process_corr_data(pearson_corr)
-    pearson_corr = pd.DataFrame(pearson_corr, columns=["line_num", "pearson_corr"])
-
-    spearman_corr = process_coding(os.path.join(path, "spearman.txt"))
-    spearman_corr = process_corr_data(spearman_corr)
-    spearman_corr = pd.DataFrame(spearman_corr, columns=["line_num", "pearson_corr"])
-
-    kendall_corr = process_coding(os.path.join(path, "kendall.txt"))
-    kendall_corr = process_corr_data(kendall_corr)
-    kendall_corr = pd.DataFrame(kendall_corr, columns=["line_num", "pearson_corr"])
+    all_df_dict = dict()
+    method_list = ['pearson', 'spearman', 'kendall']
+    for method in method_list:
+        file_name = method + ".txt"
+        corr = process_coding(os.path.join(path, file_name))
+        corr = process_corr_data(corr)
+        all_df_dict[method] = pd.DataFrame(corr, columns=["line_num", method])
 
     fault_line_data = process_coding(os.path.join(path, "faultLine.txt"))
     fault_line_data = process_fault_line_data(fault_line_data)
 
-    return pearson_corr,spearman_corr,kendall_corr,fault_line_data
+    return all_df_dict, fault_line_data
 
 
 def get_rank_percent_data(path):
