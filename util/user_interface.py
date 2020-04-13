@@ -1,6 +1,6 @@
 from util.get_data import *
 from util.write_to_txt import *
-from corr_core.cala_corr import *
+from corr_core.calc_corr import *
 from corr_core.calc_rank import *
 from corr_core.rank_plot import *
 
@@ -62,6 +62,7 @@ def start_calc_rank(start_dir):
 
 
 # 读取排名，计算百分比，存入rank_percent.txt文件中
+# 转为用excel实现
 def start_rank_percent(dir):
     pass
 
@@ -75,7 +76,7 @@ def start_plot(start_dir):
     if "rank-percent.txt" in curr_file_list:
         curr_file_list.clear()
         rank_percent_df = get_rank_percent_data(os.path.join(pre_dir, "rank-percent.txt"))
-        plot_data(rank_percent_df,pre_dir)
+        plot_data(rank_percent_df, pre_dir)
     else:
         for elem in curr_file_list:
             curr_path = os.path.join(pre_dir, elem)

@@ -60,7 +60,7 @@ def process_label_data(label_data):
 def process_fault_line_data(fault_line_data):
     temp_data = re.findall("\"(.*?)\"", fault_line_data)[0]  # type:str
     temp_data = temp_data.strip().split()
-    return list(map(int,temp_data))
+    return list(map(int, temp_data))
 
 
 # 针对pearson.txt、spearman.txt、kendall.txt
