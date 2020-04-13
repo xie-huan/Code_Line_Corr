@@ -1,6 +1,3 @@
-import numpy as np
-import pandas as pd
-from scipy import stats
 from .metrics import *
 
 def calc_corr_bymyself(data, method):
@@ -35,7 +32,7 @@ def calc_corr_bymyself(data, method):
             # corr_dict[feature] = round(kendall_corr[0], 6)
 
             # 调用自己实现的tau_b计算kendall等级相关系数
-            corr_dict[feature] = kendall(data[feature],data[label])
+            corr_dict[feature] = kendall(data[feature], data[label])
 
     corr = pd.Series(corr_dict, dtype=float)
     return corr
