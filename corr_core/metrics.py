@@ -128,6 +128,38 @@ def calc_dis(y):
     return nSwap
 
 
+# 计算Ncf、Nuf、Ncs、Nus
+# c表示cover，u表示uncover
+# f表示failure，s表示success
+def get_N_para(feature, label):
+    N = len(label)
+    success = feature[label==0]
+    failure = feature[label==1]
+
+    Ncf = np.sum(failure)
+    Nuf = N - Ncf
+
+    Ncs = np.sum(success)
+    Nus = N - Ncs
+
+    return Ncf, Nuf, Ncs, Nus
+
+
+# Dstar
+def dstar(feature, label):
+    Ncf, Nuf, Ncs, Nus = get_N_para(feature, label)
+    return round(Ncf**2/(Ncs+Nuf),6)
+
+# Ochiai
+def ochiai(feature, label):
+    Ncf, Nuf, Ncs, Nus = get_N_para(feature, label)
+    return round(Ncf/np.sqrt((Ncf+Nuf)*(Ncf+Ncs)),6)
+
+#Barinel
+def barinel(feature, label):
+    Ncf, Nuf, Ncs, Nus = get_N_para(feature, label)
+    return round(1-Ncs/(Ncs+Ncf),6)
+
 # 时间复杂度较高的kendall相关系数实现，已优化，暂不使用
 def k(data):
     # # 计算分母所需参数
@@ -215,7 +247,7 @@ def binary_fisher_score(sample,label):
             # 计算Fisher score
             m_fisher_score = m_SB / m_SW
         #Fisher score值添加进列表
-        lst.append(m_fisher_score)
+        lst.append(round(m_fisher_score,6))
 
     return lst
 
@@ -255,7 +287,7 @@ def binary_mutula_information(label, sample):
         pxy = d[key] / label.size
         binary_mi_score = binary_mi_score + pxy * math.log(pxy / (px * py))
 
-    return binary_mi_score
+    return round(binary_mi_score, 6)
 
 
 # 用斯特林公式来近似求伽马函数（卡方检验）
@@ -344,7 +376,7 @@ def my_chisquare(obs, exp):
     # 计算obs,exp的维度
     num_obs = terms.size
     # 调用自己写的求p值的函数，得到p值
-    p = chisqr2pValue(num_obs - 1, stat)
+    p = round(chisqr2pValue(num_obs - 1, stat),6)
     chisquare_list = []
     chisquare_list.append(stat)
     chisquare_list.append(p)

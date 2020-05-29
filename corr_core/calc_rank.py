@@ -5,8 +5,23 @@ def calc_rank(all_df_dict, fault_line_data):
     # 定义变量
     result_dict = dict({"pearson": float('-inf'),
                         "spearman": float('-inf'),
-                        "kendall": float('-inf')})
-    method_list = ["pearson", "spearman", "kendall"]
+                        "kendall": float('-inf'),
+                        "chisquare": float('-inf'),
+                       "mutual_information": float('-inf'),
+                       "fisher_score": float('-inf'),
+                       "dstar": float('-inf'),
+                       "ochiai": float('-inf'),
+                       "barinel": float('-inf')
+    })
+    method_list = ["pearson",
+                   "spearman",
+                   "kendall",
+                   "chisquare",
+                   "mutual_information",
+                   "fisher_score",
+                   "dstar",
+                   "ochiai",
+                   "barinel"]
     real_fault_line_data = list()  # 实际代码行
 
     # 得到所有代码行
