@@ -15,7 +15,7 @@ import os
 
 
 def write_corr_to_txt(method, corr_dict, path):
-    print("将结果写入txt文档中......")
+    print("     将结果写入txt文档中......"+"方法："+method)
 
     # 在写入txt文档之前，先对相关系数进行排序
     corr_dict.sort_values(ascending=False, inplace=True)
@@ -30,11 +30,11 @@ def write_corr_to_txt(method, corr_dict, path):
         for d in corr_dict.keys():
             print(d+"  "+str(corr_dict.get(d)), file=f)
 
-    print("写入完成。路径：" + concrete_path)
+    print("     写入完成。")
 
 
 def write_rank_to_txt(path, rank_dict):
-    print("将faultLine中的排名写入txt文档中......")
+    print("     将faultLine中的排名写入txt文档中......")
 
     file_name = "rank.txt"
     concrete_path = os.path.join(os.path.dirname(path), file_name)
@@ -42,4 +42,4 @@ def write_rank_to_txt(path, rank_dict):
         for method, rank in rank_dict.items():
             print(method+" "+str(rank), file=f)
 
-    print("写入完成。路径：" + concrete_path + "\n")
+    print("     写入完成。路径：" + concrete_path)

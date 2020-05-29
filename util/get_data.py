@@ -36,7 +36,15 @@ def get_curr_data(curr_path):
 
 def get_corr(path):
     all_df_dict = dict()
-    method_list = ['pearson', 'spearman', 'kendall']
+    method_list = ["pearson",
+                   "spearman",
+                   "kendall",
+                   "chisquare",
+                   "mutual_information",
+                   "fisher_score",
+                   "dstar",
+                   "ochiai",
+                   "barinel"]
     for method in method_list:
         file_name = method + ".txt"
         corr = process_coding(os.path.join(path, file_name))

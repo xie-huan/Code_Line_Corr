@@ -27,8 +27,15 @@ def start_calc_corr(start_dir):
 
             # 计算相关系数并输出到txt文件中
             print("计算" + os.path.dirname(curr_path) + "的相关系数:")
-            method_list = ["pearson", "spearman", "kendall"]
-            # method_list = ["mutual information", "chisquare"]
+            method_list = ["pearson",
+                           "spearman",
+                           "kendall",
+                           "chisquare",
+                           "mutual_information",
+                           "fisher_score",
+                           "dstar",
+                           "ochiai",
+                           "barinel"]
 
             for concrete_method in method_list:
                 concrete_corr = calc_corr_bymyself(data, concrete_method)
@@ -51,14 +58,25 @@ def start_calc_rank(start_dir):
             start_calc_rank(curr_path)
 
         elif os.path.isfile(curr_path):
-            correct_file_list = ['pearson.txt', 'spearman.txt', 'kendall.txt', 'faultLine.txt']
+            correct_file_list = ["pearson.txt",
+                                 "spearman.txt",
+                                 "kendall.txt",
+                                 "chisquare.txt",
+                                 "mutual_information.txt",
+                                 "fisher_score.txt",
+                                 "dstar.txt",
+                                 "ochiai.txt",
+                                 "barinel.txt"]
             if not set(correct_file_list).issubset(set(curr_file_list)):
                 continue
+
+            print("计算" + os.path.dirname(curr_path) + "的最高排名:")
             curr_file_list = [curr_file_list.remove(file) for file in correct_file_list]
 
             all_df_dict, fault_line_data = get_corr(os.path.dirname(curr_path))
             rank_dict = calc_rank(all_df_dict, fault_line_data)
             write_rank_to_txt(curr_path, rank_dict)
+            print("计算当前文件夹结束\n")
 
 
 # 读取排名，计算百分比，存入rank_percent.txt文件中
