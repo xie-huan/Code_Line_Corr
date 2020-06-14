@@ -1,5 +1,6 @@
 from util.process_coding import *
 import re
+import numpy as np
 
 
 # 功能：判断文件中的换行符是windows、Linux还是Mac下的换行符
@@ -29,7 +30,7 @@ def process_content(columns_path):
         temp_content = columns.split()
         total_line = int(temp_content[0])
         concrete_columns = columns.split()[1:total_line+1]
-    return concrete_columns
+    return total_line,concrete_columns
 
 
 # 读取特征矩阵
@@ -72,6 +73,36 @@ def process_corr_data(corr_data):
         elem[1] = float(elem[1])
     return corr_data
 
+# 针对每个版本的代码行数
+def process_total_line_data(total_line_raw_data):
+    token = choose_newlines(total_line_raw_data)
+    lines = total_line_raw_data.split(token)
+
+    total_line_list = list()
+    for line in lines:
+        num = int(re.findall(":(\S+)", line)[0])
+        total_line_list.append(int(num))
+
+    return np.array(total_line_list)
+
+
+# 处理rank.txt数据
+def process_rank_data(rank_raw_data):
+    token = choose_newlines(rank_raw_data)
+    lines = rank_raw_data.split(token)
+
+    rank_list = list()
+    flag = 0
+    for line in lines:
+        if flag % 4 == 2:
+            num_list = line.strip().split("\t")
+            num_list = [np.nan if num == "nan" else int(num) for num in num_list]
+            rank_list.append(num_list)
+        flag += 1
+
+    rank_list = np.array(rank_list)
+
+    return rank_list
 
 # # 针对rank-percent.txt
 # def process_rank_percent(rank_percent_data):
