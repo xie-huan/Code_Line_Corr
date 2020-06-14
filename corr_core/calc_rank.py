@@ -1,27 +1,12 @@
 import numpy as np
+from data_config import *
 
+# 参数：
+# all_df_dict：表示所有数据字典
+# fault_line_data：实际错误的代码行，从faultLine.txt中提取
+# method_list：具体使用算法列表
+def calc_rank(all_df_dict, fault_line_data, method_list):
 
-def calc_rank(all_df_dict, fault_line_data):
-    # 定义变量
-    result_dict = dict({"pearson": float('-inf'),
-                        "spearman": float('-inf'),
-                        "kendall": float('-inf'),
-                        "chisquare": float('-inf'),
-                       "mutual_information": float('-inf'),
-                       "fisher_score": float('-inf'),
-                       "dstar": float('-inf'),
-                       "ochiai": float('-inf'),
-                       "barinel": float('-inf')
-    })
-    method_list = ["pearson",
-                   "spearman",
-                   "kendall",
-                   "chisquare",
-                   "mutual_information",
-                   "fisher_score",
-                   "dstar",
-                   "ochiai",
-                   "barinel"]
     real_fault_line_data = list()  # 实际代码行
 
     # 得到所有代码行
@@ -37,11 +22,16 @@ def calc_rank(all_df_dict, fault_line_data):
     for method in method_list:
         concrete_df = all_df_dict[method]
         temp_df = concrete_df[concrete_df["line_num"].isin(real_fault_line_data)]
-        val_list = temp_df[method].values.tolist()
-        correct_df = concrete_df[concrete_df[method].isin(val_list)][method]
 
-        rank = correct_df.index.values[0]
-        val = correct_df.loc[rank]
+        # # 处理排名并列情况
+        # val_list = temp_df[method].values.tolist()
+        # correct_df = concrete_df[concrete_df[method].isin(val_list)][method]
+        # rank = correct_df.index.values[0]
+        # val = correct_df.loc[rank]
+
+        # 不处理排名并列情况
+        rank = temp_df.index.values[0]
+        val = temp_df[method].values[0]
 
         if val != val:
             result_dict[method] = np.nan
