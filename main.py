@@ -1,34 +1,37 @@
 from util.user_interface import *
-# 单元测试
-# test_path = "D:/Work/Python/bysj/Test_Data/gzip-bug-2010-02-19-3eb6091d69-884ef6d16c"
-# data = get_curr_data(test_path)
 
-# # #数据开始查找的路径
-# dir_name = os.path.abspath(os.path.dirname(__file__))
-# start_dir = os.path.join(dir_name, "DATA_TEST")
-# # 用户接口，传入数据所在路径即可
-# start_calc_corr(start_dir)
-#
-# # 计算排名
-# dir_name = os.path.abspath(os.path.dirname(__file__))
-# start_dir = os.path.join(dir_name, "DATA_TEST")
-# start_calc_rank(start_dir)
+# 配置路径
+dir_name = os.path.abspath(os.path.dirname(__file__))
+start_dir = os.path.join(dir_name, "DATA_TEST")
 
-# TODO：自动化计算rank/LOC的百分比
-
+# 计算相关系数
+start_calc_corr(start_dir)
+# 给出故障代码在排名表中的排名
+start_calc_rank(start_dir)
+# 计算EXAM标准所需的百分比
+start_rank_percent(start_dir)
 # 绘图
-# dir_name = os.path.abspath(os.path.dirname(__file__))
-# start_dir = os.path.join(dir_name, "DATA_TEST")
-# start_plot(start_dir)
+start_plot(start_dir)
 
 
-from scipy import stats
+
+
+
+
+
+
+# plot_RImp()
+
+
+# from scipy import stats
 # x1 = np.arange(0,11)
 # y1 = x1
 # y2 = x1*2
 # y3 = -0.32 * (x1**2) + 3.2*x1
-# # tau = stats.kendalltau(x1, y1)
-# # print(stats.pearsonr(x1,y1))
+# x=[12,2,1,12,2]
+# y=[1,4,7,1,0]
+# tau = stats.kendalltau(x, y)
+# print(stats.pearsonr(x1,y1))
 # # print(stats.pearsonr(x1,y2))
 # # print(stats.pearsonr(x1,y3))
 # # stats.spearmanr(x1,x2)
@@ -66,4 +69,29 @@ from scipy import stats
 # plt.title("")
 # plt.savefig("X-Y_PCC.png",dpi=600)
 # plt.show()
+
+# 检验Dstar算法的正确性
+# covMatrix = pd.DataFrame([
+#     [1,1,1,1,1,0,0,0,0],
+#     [1,1,1,1,0,1,1,0,0],
+#     [1,1,1,1,0,1,0,1,0],
+#     [1,1,1,1,0,1,0,1,0],
+#     [1,1,0,0,0,0,0,0,1],
+#     [1,1,1,1,1,0,0,0,0],
+#     [1,1,1,1,1,0,0,0,0],
+#     [1,1,1,1,0,1,0,1,0],
+#     [1,1,1,1,0,1,1,0,0],
+#     [1,1,1,1,1,0,0,0,0],
+#     [1,1,1,1,1,0,0,0,0],
+#     [1,1,1,1,1,0,0,0,0],
+# ])
+#
+# error = pd.DataFrame([1,1,1,1,0,0,0,0,0,0,0,0])
+#
+# # a = covMatrix[0]
+# # i = 0
+# for i in range(0,9):
+#     print(dstar(pd.DataFrame(covMatrix[i]),error))
+
+
 
